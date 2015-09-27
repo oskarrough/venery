@@ -1,39 +1,47 @@
 import React, { Component } from 'react';
-import { NICE, SUPER_NICE } from './colors';
+import uniq from 'lodash/array/uniq';
 
-class Counter extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { counter: 0 };
-    this.interval = setInterval(() => this.tick(), 1000);
-  }
+// Store
+const database = require('./database.json').data;
+const verns = database;
+const animals = uniq(database.map((item) => item.animal));
+const nouns = uniq(database.map((item) => item.noun));
 
-  tick() {
-    this.setState({
-      counter: this.state.counter + this.props.increment
-    });
-  }
+class ListItemWrapper extends Component {
+	render() {
+		return <li>{this.props.data}</li>;
+	}
+};
 
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
-
-  render() {
-    return (
-      <h1 style={{ color: this.props.color }}>
-        Counter ({this.props.increment}): {this.state.counter}
-      </h1>
-    );
-  }
-}
+class List extends Component {
+	render() {
+		return (
+			<ul>
+				{this.props.items.map((item) => {
+					return <ListItemWrapper key={item.id} data={item}/>;
+				})}
+			</ul>
+		);
+	}
+};
 
 export class App extends Component {
-  render() {
-    return (
-      <div>
-        <Counter increment={1} color={NICE} />
-        <Counter increment={5} color={SUPER_NICE} />
-      </div>
-    );
-  }
+	render() {
+		return (
+			<div className="Flex">
+				<div className="Flex-item">
+					<h3>{verns.length} verns</h3>
+					<List items={verns} />
+				</div>
+				<div className="Flex-item">
+					<h3>{animals.length} animals</h3>
+					<List items={animals} />
+				</div>
+				<div className="Flex-item">
+					<h3>{nouns.length} nouns</h3>
+					<List items={nouns} />
+				</div>
+			</div>
+		);
+	}
 }

@@ -9,7 +9,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
-    publicPath: '/static/'
+    publicPath: '/'
   },
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
@@ -28,6 +28,10 @@ module.exports = {
     loaders: [{
       test: /\.js$/,
       loaders: ['babel'],
+      include: path.join(__dirname, 'src')
+    },{
+      test: /\.json$/,
+      loaders: ['json-loader'],
       include: path.join(__dirname, 'src')
     }]
   }
